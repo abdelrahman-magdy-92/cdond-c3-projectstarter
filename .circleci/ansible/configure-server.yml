@@ -21,10 +21,10 @@
       apt:
         update_cache: yes
     
-    - name: "upgrade packages"
-      become: true
-      apt:
-        upgrade: yes
+    # - name: "upgrade packages"
+    #   become: true
+    #   apt:
+    #     upgrade: yes
 
     - name: "remove dependencies that are no longer required"
       become: true
@@ -36,7 +36,7 @@
       apt: 
         name: ["python3.8","nodejs","npm"]
         state: latest
-        update_cashe: yes
+        update_cache: yes
 
     - name: "install pm2"
       become: true
