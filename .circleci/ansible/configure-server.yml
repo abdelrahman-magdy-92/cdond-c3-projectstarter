@@ -31,6 +31,13 @@
       apt:
         autoremove: yes
 
+    - name: "install python for Ansible, nodejs, and npm"
+      bacome: true
+      apt: 
+        name: ["python3.8","nodejs","npm"]
+        state: latest
+        update_cashe: yes
+
     - name: "install pm2"
       become: true
       npm:
@@ -38,13 +45,6 @@
         global: yes
         production: yes
         state: present
-
-    - name: "install python for Ansible."
-      bacome: true
-      apt: 
-        name: ["python3.8","nodejs","npm"]
-        state: latest
-        update_cashe: yes
 
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
