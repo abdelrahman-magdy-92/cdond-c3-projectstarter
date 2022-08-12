@@ -32,7 +32,7 @@
         autoremove: yes
 
     - name: "install python for Ansible, nodejs, and npm"
-      bacome: true
+      become: true
       apt: 
         name: ["python3.8","nodejs","npm"]
         state: latest
