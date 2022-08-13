@@ -233,7 +233,9 @@ jobs:
             yum install -y python3
             amazon-linux-extras install -y epel
             yum install -y ansible
-            yum install -y nodejs
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+            . ~/.nvm/nvm.sh
+            nvm install --lts
             python3 --version
             ansible --version
             node --version
