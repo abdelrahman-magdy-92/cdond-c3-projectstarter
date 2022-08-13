@@ -129,7 +129,8 @@ jobs:
           command : |
             cd backend
             npm install
-            npm install minimist@^1.2.6
+            ncu -u
+            #npm install minimist@^1.2.6
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit fix --audit-level=critical --force
