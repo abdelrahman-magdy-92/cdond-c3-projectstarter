@@ -129,7 +129,7 @@ jobs:
           command : |
             cd backend
             npm install
-            ncu -u
+            #ncu -u
             #npm install minimist@^1.2.6
             npm audit fix --audit-level=critical --force
             npm audit fix --force
@@ -216,8 +216,6 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --audit-level=critical --force
-            npm audit fix --force
             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
@@ -237,21 +235,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: Install dependencies
           command: |
-            yum update -y
-            yum install -y tar
-            yum install -y python3
-            amazon-linux-extras install -y epel
-            yum install -y ansible
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-            . ~/.nvm/nvm.sh
-            nvm install --lts
-            python3 --version
-            ansible --version
+            curl -fsSL https://rpm.nodesource.com/setup_13.x | bash - && yum -y install nodejs tar gzip
             node --version
             npm --version
       - run:
