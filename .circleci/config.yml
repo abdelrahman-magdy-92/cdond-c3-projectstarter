@@ -231,7 +231,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -239,9 +239,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            curl -fsSL https://rpm.nodesource.com/setup_13.x | bash - && yum -y install nodejs tar gzip
-            node --version
-            npm --version
+            # curl -fsSL https://rpm.nodesource.com/setup_13.x | bash - && yum -y install nodejs tar gzip
+            # node --version
+            # npm --version
+            sudo apt-get update && sudo apt-get install -y awscli tar gzip
       - run:
           name: Get backend url
           command: |
@@ -307,28 +308,46 @@ jobs:
           backendstack: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
-#   smoke-test:
-#     docker:
-#       # Lightweight Docker image 
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Get backend url
-#           command: |
-#             # your code here
-#       - run:
-#           name: Backend smoke test.
-#           command: |
-#             # your code here
-#       - run:
-#           name: Frontend smoke test.
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  smoke-test:
+    docker:
+      - image: circleci/node:13.8.0
+      # Lightweight Docker image 
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y awscli
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+      - run:
+          name: Backend smoke test.
+          command: |
+            cat ~/api_url.txt
+            export API_URL=$(cat ~/api_url.txt)
+            if curl -s "${API_URL}/api/status" | grep "ok"
+              then
+                  exit 0
+              else
+                  exit 1
+              fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            if curl -s http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees | grep "Welcome"
+              then
+                exit 0
+              else
+                exit 1
+              fi
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          frontendstack: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+          backendstack: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations
 
 #   cloudfront-update:
 #     docker:
@@ -387,8 +406,8 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
       # - smoke-test:
