@@ -34,7 +34,7 @@
     - name: "install python for Ansible, nodejs, and npm"
       become: true
       apt: 
-        name: ["python3.8","nodejs","npm"]
+        name: ["python3.8","nodejs","npm","tar"]
         state: latest
         update_cache: yes
 
