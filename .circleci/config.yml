@@ -272,7 +272,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: python:3.7-alpine3.12
     steps:
       - checkout
       - restore_cache:
@@ -285,9 +285,12 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update -y
-            sudo apt-get install -y python3
-            sudo apt-get install -y awscli ansible tar
+            apk add --update ansible
+            apk add --update aws-cli
+            apk add --update tar
+            apk add --update gzip
+            apk add --update nodejs
+            apk add --update npm
       - run:
           name: Deploy backend
           command: |
