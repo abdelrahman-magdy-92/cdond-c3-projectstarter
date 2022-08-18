@@ -224,7 +224,7 @@ jobs:
       - run:
           name: Send migration results to kvdb
           command: |
-              if grep -q "has been executed successfully." ~/migrations_dump.txt
+              if grep "has been executed successfully." ~/migrations_dump.txt
               then
                 curl --insecure https://kvdb.io/C4ve2PxG7CKCh6kkAZtrNQ/migration_1  -d '1'
               fi
@@ -323,31 +323,31 @@ jobs:
           command: |
             sudo apt-get update -y
             sudo apt-get install -y awscli
-      # - run:
-      #     name: Get backend url
-      #     command: |
-      #       # your code here
-      # - run:
-      #     name: Backend smoke test.
-      #     command: |
-      #       export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:project,Values=udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
-      #       export API_URL="http://${BACKEND_IP}:3030"
-      #       echo "${API_URL}"
-      #       if curl -s "${API_URL}/api/status" | grep "ok"
-      #         then
-      #             exit 0
-      #         else
-      #             exit 1
-      #         fi
-      # - run:
-      #     name: Frontend smoke test.
-      #     command: |
-      #       if curl -s http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees | grep "Welcome"
-      #         then
-      #           exit 0
-      #         else
-      #           exit 1
-      #         fi
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+      - run:
+          name: Backend smoke test.
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:project,Values=udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            if curl -s "${API_URL}/api/status" | grep "ok"
+              then
+                  exit 0
+              else
+                  exit 1
+              fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            if curl -s http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees | grep "Welcome"
+              then
+                exit 0
+              else
+                exit 1
+              fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           frontendstack: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
