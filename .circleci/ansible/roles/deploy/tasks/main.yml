@@ -8,6 +8,11 @@
     src: artifact.tar.gz
     dest: ~/web
 
+- name: "Install node dependencies"
+  shell: |
+    cd ~/backend-app
+    npm install
+
 - name: "Executing node"
   shell: |
     cd ~/web/dist
