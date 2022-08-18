@@ -10,7 +10,7 @@
 
 - name: "Install node dependencies"
   shell: |
-    cd ~/backend-app
+    cd ~/web
     npm install
 
 - name: "Executing node"
